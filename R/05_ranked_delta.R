@@ -52,13 +52,13 @@ cutoff_value <- max(lowest_deltas$prediction_deltas)
 rank_plot <- ggplot(prediction_deltas_df, aes(x = Rank, y = prediction_deltas)) +
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = cutoff_value, ymax = Inf, fill = "#BFC9D1", alpha = 0.5) + 
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = cutoff_value, fill = "#FF9B51", alpha = 0.5) +  
-  geom_hline(yintercept = cutoff_value, linetype = "dashed", color = "#454040", size = 0.5) +
+  geom_hline(yintercept = cutoff_value, linetype = "dashed", color = "black", size = 0.5) +
   geom_smooth(color = "#454040", size = 1, se = FALSE, method = "loess") +
   annotate("text", x = max(prediction_deltas_df$Rank) * 0.5, y = cutoff_value + 0.05, label = "High Delta Group", color = "#454040", size = 3, hjust = 0.5) +
   annotate("text", x = max(prediction_deltas_df$Rank) * 0.5, y = cutoff_value - 0.05, label = "Low Delta Group", color = "#454040", size = 3, hjust = 0.5) +
   labs(
     title = "Rank Plot of Prediction Deltas (TCGA)",
-    subtitle = paste0("Cutoff Value: ", cutoff_value, " (n Low Delta: ", n_lowest_deltas, ")"),
+    #subtitle = paste0("Cutoff Value: ", cutoff_value, " (n Low Delta: ", n_lowest_deltas, ")"),
     x = "",
     y = "Prediction Delta"
   ) +
@@ -73,7 +73,7 @@ print(rank_plot)
 library_size_plot <- ggplot(merged_data, aes(x = Rank.x, y = TCGA_LibrarySizes)) +
   geom_smooth(color = "#454040", size = 1, se = FALSE, method = "loess") +
   geom_point(data = merged_data %>% filter(Highlight == "Lowest Deltas"),
-             fill = "#FF9B51", color = "#454040", size = 2, shape = 21) +
+             fill = "#FF9B51", color = "#454040", size = 5, shape = 21) +
   labs(
     title = "Library Size (TCGA) Rank Plot with Lowest Prediction Deltas",
     x = "Rank",
@@ -87,5 +87,5 @@ library_size_plot <- ggplot(merged_data, aes(x = Rank.x, y = TCGA_LibrarySizes))
 print(library_size_plot)
 
 #export plots
-ggsave("rank_plot_prediction_deltas.pdf", plot = rank_plot, device = "pdf", path = "out/rank_plots", width = 8, height = 4, dpi = 300)
-ggsave("library_size_rank_plot.pdf", plot = library_size_plot, device = "pdf", path = "out/rank_plots", width = 8, height = 4, dpi = 300)
+ggsave("rank_plot_prediction_deltas.pdf", plot = rank_plot, device = "pdf", path = "out/rank_plots", width = 6, height = 4, dpi = 300)
+ggsave("library_size_rank_plot.pdf", plot = library_size_plot, device = "pdf", path = "out/rank_plots", width = 6, height = 4, dpi = 300)
