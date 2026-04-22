@@ -10,7 +10,7 @@ load("out/prediction_calls/pred_tcga.Rdata")
 load("out/prediction_calls/pred_leeds.Rdata")
 
 #source function
-sourece("R/fun_create_delta_boxplot.R")
+source("R/fun_create_delta_boxplot.R")
 
 #set subtype order
 subtype_order_5 <- c("Uro", "GU", "BaSq", "Mes", "ScNE")

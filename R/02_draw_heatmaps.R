@@ -4,29 +4,25 @@ library(ggplot2)
 library(tibble)
 library(LundTaXR)
 
-#load expression data
-load("data/uc_genome_tpm.Rdata")
-load("data/tcga_salmon_getpm.Rdata")
-load("data/leeds_rma.Rdata")
-
 #load prediction calls
 load("out/prediction_calls/pred_uc_genome.Rdata")
 load("out/prediction_calls/pred_tcga.Rdata")
 load("out/prediction_calls/pred_leeds.Rdata")
 
-devtools::load_all('../../LBCG/LundTaxR/')
+#load LundTaxR
+devtools::load_all('../LBCG/LundTaxR/')
 
 #construct metadata
-meta_uc_genome = as.data.frame(colnames(uc_genome_tpm)) %>% 
-  rename(sample_id = `colnames(uc_genome_tpm)`) %>% 
+meta_uc_genome = as.data.frame(colnames(pred_uc_genome$data)) %>% 
+  rename(sample_id = `colnames(pred_uc_genome$data)`) %>% 
   mutate(Dataset = "UC Genome")
 
-meta_tcga = as.data.frame(colnames(tcga_salmon_getpm)) %>% 
-  rename(sample_id = `colnames(tcga_salmon_getpm)`) %>% 
+meta_tcga = as.data.frame(colnames(pred_tcga$data)) %>% 
+  rename(sample_id = `colnames(pred_tcga$data)`) %>% 
   mutate(Dataset = "TCGA")
 
-meta_leeds = as.data.frame(colnames(leeds_rma)) %>% 
-  rename(sample_id = `colnames(leeds_rma)`) %>% 
+meta_leeds = as.data.frame(colnames(pred_leeds$data)) %>% 
+  rename(sample_id = `colnames(pred_leeds$data)`) %>% 
   mutate(Dataset = "Leeds")
 
 #create dataset annotations
@@ -47,7 +43,6 @@ leeds_annotations = LundTaxR::get_custom_annotations(metadata = meta_leeds,
   
 #draw heatmaps
 LundTaxR::plot_classification_heatmap(these_predictions = pred_uc_genome, 
-                                      this_data = uc_genome_tpm, 
                                       custom_annotation = uc_genome_annotations,
                                       subtype_annotation = "7_class", 
                                       plot_scores = TRUE, 
@@ -62,7 +57,6 @@ LundTaxR::plot_classification_heatmap(these_predictions = pred_uc_genome,
                                       out_format = "pdf")
 
 LundTaxR::plot_classification_heatmap(these_predictions = pred_tcga, 
-                                      this_data = tcga_salmon_getpm, 
                                       custom_annotation = tcga_annotations,
                                       subtype_annotation = "7_class", 
                                       plot_scores = TRUE, 
@@ -75,7 +69,6 @@ LundTaxR::plot_classification_heatmap(these_predictions = pred_tcga,
                                       out_format = "pdf")
 
 LundTaxR::plot_classification_heatmap(these_predictions = pred_leeds, 
-                                      this_data = leeds_rma, 
                                       custom_annotation = leeds_annotations,
                                       subtype_annotation = "7_class", 
                                       plot_scores = TRUE, 
