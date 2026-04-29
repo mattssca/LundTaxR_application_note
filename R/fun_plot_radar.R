@@ -2,7 +2,8 @@ plot_radar = function(these_predictions = NULL,
                       this_sample_id = NULL, 
                       these_samples_metadata = NULL,
                       draw_plot = TRUE, 
-                      plot_type = "radar"){
+                      plot_type = "radar",
+                      font_size = 5){
   
   desired_levels_5 <- c("Uro", "GU", "BaSq", "Mes", "ScNE")
   desired_levels_7 <- c("UroA", "UroB", "UroC")
@@ -60,13 +61,13 @@ plot_radar = function(these_predictions = NULL,
                              grid.min = 0, 
                              grid.mid = 0.5, 
                              grid.max = 1, 
-                             grid.label.size = 10,
-                             axis.label.size = 5, 
+                             grid.label.size = font_size * 1.5,
+                             axis.label.size = font_size, 
                              axis.line.colour = "black", 
-                             grid.line.width = 0.5, 
+                             grid.line.width = 0.1, 
                              gridline.max.linetype = 1,
-                             group.line.width = 1, 
-                             group.point.size = 2, 
+                             group.line.width = 0.2, 
+                             group.point.size = 0.3, 
                              background.circle.colour = "white", 
                              gridline.mid.colour = "black", 
                              gridline.min.colour = "black", 
@@ -75,21 +76,24 @@ plot_radar = function(these_predictions = NULL,
                              fill = TRUE,
                              legend.position = "none",
                              fill.alpha = 0.8) +
-          ggtitle(paste("7 Class\nSubtype Prediction Score\n", sample_data_5$sample_id[1])) +
-          theme(plot.title = element_text(hjust = 0.5, size = 10))
+          ggtitle(paste(sample_data_5$sample_id[1])) +
+          theme(plot.title = element_text(hjust = 0.5, size = font_size * 2))
+        
+        radar_plot$layers[[8]]$aes_params$linewidth <- 0.3
+        
       }else{
         radar_plot = ggradar(plot_data, 
                              values.radar = c("", "", ""),
                              grid.min = 0, 
                              grid.mid = 0.5, 
                              grid.max = 1, 
-                             grid.label.size = 10,
-                             axis.label.size = 5, 
+                             grid.label.size = font_size * 1.5,
+                             axis.label.size = font_size, 
                              axis.line.colour = "black", 
-                             grid.line.width = 0.5, 
+                             grid.line.width = 0.1, 
                              gridline.max.linetype = 1,
-                             group.line.width = 1, 
-                             group.point.size = 2, 
+                             group.line.width = 0.2, 
+                             group.point.size = 0.3, 
                              background.circle.colour = "white", 
                              gridline.mid.colour = "black", 
                              gridline.min.colour = "black", 
@@ -98,8 +102,11 @@ plot_radar = function(these_predictions = NULL,
                              fill = TRUE,
                              legend.position = "none",
                              fill.alpha = 0.8) +
-          ggtitle(paste("5 Class\nSubtype Prediction Score\n", sample_data_5$sample_id[1])) +
-          theme(plot.title = element_text(hjust = 0.5, size = 10))
+          ggtitle(paste(sample_data_5$sample_id[1])) +
+          theme(plot.title = element_text(hjust = 0.5, size = font_size * 2))
+        
+        radar_plot$layers[[8]]$aes_params$linewidth <- 0.3
+        
       }
     }else{
       stop("Not a valid plot option...")

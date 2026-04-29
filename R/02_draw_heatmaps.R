@@ -10,7 +10,7 @@ load("out/prediction_calls/pred_tcga.Rdata")
 load("out/prediction_calls/pred_leeds.Rdata")
 
 #load LundTaxR
-devtools::load_all('../LBCG/LundTaxR/')
+source("R/fun_plot_classification_heatmap.R")
 
 #construct metadata
 meta_uc_genome = as.data.frame(colnames(pred_uc_genome$data)) %>% 
@@ -42,39 +42,42 @@ leeds_annotations = LundTaxR::get_custom_annotations(metadata = meta_leeds,
                                                      custom_colors = list(Dataset = c("Leeds" = "#5A7ACD")))
   
 #draw heatmaps
-LundTaxR::plot_classification_heatmap(these_predictions = pred_uc_genome, 
+plot_classification_heatmap(these_predictions = pred_uc_genome, 
                                       custom_annotation = uc_genome_annotations,
                                       subtype_annotation = "7_class", 
                                       plot_scores = TRUE, 
                                       plot_signature_scores = TRUE, 
                                       show_ann_legend = TRUE, 
                                       show_hm_legend = TRUE,
-                                      ann_height = 6,
-                                      plot_height = 11,
+                                      row_height = 3,
+                                      ann_height = 5,
+                                      plot_height = 14,
                                       col_width = 0.5,
                                       plot_title = "UC Genome", 
                                       out_path = "out/classification_heatmaps/", 
                                       out_format = "pdf")
 
-LundTaxR::plot_classification_heatmap(these_predictions = pred_tcga, 
+plot_classification_heatmap(these_predictions = pred_tcga, 
                                       custom_annotation = tcga_annotations,
                                       subtype_annotation = "7_class", 
                                       plot_scores = TRUE, 
                                       plot_signature_scores = TRUE, 
-                                      ann_height = 6,
-                                      plot_height = 11,
+                                      row_height = 3,
+                                      ann_height = 5,
+                                      plot_height = 14,
                                       col_width = 0.5,
                                       plot_title = "TCGA", 
                                       out_path = "out/classification_heatmaps/", 
                                       out_format = "pdf")
 
-LundTaxR::plot_classification_heatmap(these_predictions = pred_leeds, 
+plot_classification_heatmap(these_predictions = pred_leeds, 
                                       custom_annotation = leeds_annotations,
                                       subtype_annotation = "7_class", 
                                       plot_scores = TRUE, 
                                       plot_signature_scores = TRUE, 
-                                      ann_height = 6, 
-                                      plot_height = 11,
+                                      row_height = 3,
+                                      ann_height = 5,
+                                      plot_height = 14,
                                       col_width = 0.5,
                                       plot_title = "Leeds", 
                                       out_path = "out/classification_heatmaps/", 

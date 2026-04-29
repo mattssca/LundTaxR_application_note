@@ -6,6 +6,7 @@ library(LundTaxR)
 
 #configuration
 n_lowest_deltas <- 50
+base_font_size <- 12
 
 # Load prediction calls and library size data
 load("out/prediction_calls/pred_tcga.Rdata")
@@ -48,32 +49,40 @@ merged_data$Highlight <- ifelse(!is.na(merged_data$prediction_deltas), "Lowest D
 # Define the cutoff value for the lowest deltas
 cutoff_value <- max(lowest_deltas$prediction_deltas)
 
-# Create the rank plot for prediction deltas with a horizontal cutoff line, shaded areas, and annotations
+#shared theme
+shared_theme <- theme_minimal(base_size = base_font_size) +
+  theme(
+    axis.text.x = element_text(color = "black"),
+    axis.text.y = element_text(color = "black"),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 0.3),
+    panel.background = element_rect(fill = "white", color = NA),
+    panel.grid.major = element_line(color = "grey85", linewidth = 0.2),
+    panel.grid.minor = element_line(color = "grey85", linewidth = 0.2)
+  )
+
+# Create the rank plot
 rank_plot <- ggplot(prediction_deltas_df, aes(x = Rank, y = prediction_deltas)) +
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = cutoff_value, ymax = Inf, fill = "#BFC9D1", alpha = 0.5) + 
   annotate("rect", xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = cutoff_value, fill = "#FF9B51", alpha = 0.5) +  
-  geom_hline(yintercept = cutoff_value, linetype = "dashed", color = "black", size = 0.5) +
-  geom_smooth(color = "#454040", size = 1, se = FALSE, method = "loess") +
-  annotate("text", x = max(prediction_deltas_df$Rank) * 0.5, y = cutoff_value + 0.05, label = "High Delta Group", color = "#454040", size = 3, hjust = 0.5) +
-  annotate("text", x = max(prediction_deltas_df$Rank) * 0.5, y = cutoff_value - 0.05, label = "Low Delta Group", color = "#454040", size = 3, hjust = 0.5) +
+  geom_hline(yintercept = cutoff_value, linetype = "dashed", color = "black", linewidth = 0.3) +
+  geom_smooth(color = "#454040", linewidth = 0.5, se = FALSE, method = "loess") +
+  annotate("text", x = max(prediction_deltas_df$Rank) * 0.5, y = cutoff_value + 0.05, label = "High Delta Group", color = "#454040", size = base_font_size / .pt, hjust = 0.5) +
+  annotate("text", x = max(prediction_deltas_df$Rank) * 0.5, y = cutoff_value - 0.05, label = "Low Delta Group", color = "#454040", size = base_font_size / .pt, hjust = 0.5) +
   labs(
     title = "Rank Plot of Prediction Deltas (TCGA)",
-    #subtitle = paste0("Cutoff Value: ", cutoff_value, " (n Low Delta: ", n_lowest_deltas, ")"),
     x = "",
     y = "Prediction Delta"
   ) +
   scale_x_continuous(expand = c(0, 0), limits = c(0, max(prediction_deltas_df$Rank))) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, max(prediction_deltas_df$prediction_deltas))) +
-  theme_minimal() +
-  theme(panel.border = element_rect(color = "#454040", fill = NA, linewidth = 0.8))
+  shared_theme
 
-# View the plot in the session
 print(rank_plot)
 
 library_size_plot <- ggplot(merged_data, aes(x = Rank.x, y = TCGA_LibrarySizes)) +
-  geom_smooth(color = "#454040", size = 1, se = FALSE, method = "loess") +
+  geom_smooth(color = "#454040", linewidth = 0.5, se = FALSE, method = "loess") +
   geom_point(data = merged_data %>% filter(Highlight == "Lowest Deltas"),
-             fill = "#FF9B51", color = "#454040", size = 5, shape = 21) +
+             fill = "#FF9B51", color = "black", size = 5, shape = 21) +
   labs(
     title = "Library Size (TCGA) Rank Plot with Lowest Prediction Deltas",
     x = "Rank",
@@ -81,11 +90,10 @@ library_size_plot <- ggplot(merged_data, aes(x = Rank.x, y = TCGA_LibrarySizes))
   ) +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0)) +
-  theme_minimal() +
-  theme(panel.border = element_rect(color = "#454040", fill = NA, linewidth = 0.8))
+  shared_theme
 
 print(library_size_plot)
 
 #export plots
-ggsave("rank_plot_prediction_deltas.pdf", plot = rank_plot, device = "pdf", path = "out/rank_plots", width = 6, height = 4, dpi = 300)
-ggsave("library_size_rank_plot.pdf", plot = library_size_plot, device = "pdf", path = "out/rank_plots", width = 6, height = 4, dpi = 300)
+ggsave("rank_plot_prediction_deltas.pdf", plot = rank_plot, device = cairo_pdf, family = "Arial", path = "out/rank_plots", width = 6, height = 4)
+ggsave("library_size_rank_plot.pdf", plot = library_size_plot, device = cairo_pdf, family = "Arial", path = "out/rank_plots", width = 6, height = 4)

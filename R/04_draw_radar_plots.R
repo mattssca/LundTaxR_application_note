@@ -4,7 +4,7 @@ library(dplyr)
 library(ggplot2)
 library(tibble)
 library(LundTaxR)
-library(fmsb)
+library(ggradar)
 
 #load prediction calls
 load("out/prediction_calls/pred_tcga.Rdata")

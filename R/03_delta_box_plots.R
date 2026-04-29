@@ -31,6 +31,8 @@ subtype_colors <- c(
 #draw plots
 create_delta_boxplot(
   prediction_object = pred_uc_genome,
+  base_font_size = 12,
+  width_mm = 100,
   subtype_order_5 = subtype_order_5,
   subtype_order_7 = subtype_order_7,
   subtype_colors = subtype_colors,
@@ -40,6 +42,8 @@ create_delta_boxplot(
 
 create_delta_boxplot(
   prediction_object = pred_tcga,
+  base_font_size = 12,
+  width_mm = 100,
   subtype_order_5 = subtype_order_5,
   subtype_order_7 = subtype_order_7,
   subtype_colors = subtype_colors,
@@ -49,7 +53,9 @@ create_delta_boxplot(
 
 create_delta_boxplot(
   prediction_object = pred_leeds,
-  subtype_order_5 = subtype_order_5,
+  subtype_order_5 = subtype_order_5, 
+  base_font_size = 12,
+  width_mm = 100,
   subtype_order_7 = subtype_order_7,
   subtype_colors = subtype_colors,
   plot_title = "Leeds",
